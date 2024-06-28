@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Todo App</title>
+    <meta name="theme-color" content="rgb(226, 232, 240)" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://img.icons8.com/?size=100&id=UC6aTgplaR9s&format=png&color=000000"
+      type="image/x-icon"
+    />
+    <link href="./output.css" rel="stylesheet" />
+    <link href="./app.css" rel="stylesheet" />
+    <style>
+      input::placeholder {
+        color: black;
+      }
+    </style>
+  </head>
+  <body class="flex justify-between bg-slate-200 align-middle">
+    <!-- SECTION ONE FOR NAVIGAION -->
+    <section
+      id="bC"
+      class="sec-1 bg-slate-200 h-screen text-sm"
+      style="width: 300px"
+    >
+      <!-- profile section -->
+      <div class="flex justify-start items-center gap-2">
+        <!-- <img
+          src="https://th.bing.com/th?id=OIP.y-nGyqT5AwES8oqp344z4gHaHa&w=250&h=250&c=8&rs=1&qlt=30&o=6&pid=3.1&rm=2"
+          alt=""
+          class="w-14 rounded-full m-2"
+        /> -->
+        <div
+          id="profile"
+          class="w-14 rounded-full m-2 flex justify-center items-center bg-red-200 h-14 text-xl"
+        >
+          <% if (findUser.profileImage) { %>
+          <img src="<%= findUser.profileImage %>" alt="Profile Image" />
+          <% } else { %> <%= findUser.username.split(' ').map(name =>
+          name[0]).join('') %> <% } %>
+        </div>
+
+        <div class="flex justify-between flex-col">
+          <span class="font-bold"><%= findUser.username %></span>
+          <span class="text-sm"><%= findUser.email %></span>
+        </div>
+      </div>
+      <!-- profile section end-->
+      <!-- search box -->
+      <!-- <label
+        for="search"
+        class="flex justify-around pr-2 items-center m-2 rounded-lg bg-white border-b border-blue-500"
+      >
+        <input type="search" class="w-[230px] rounded-lg p-2 outline-none" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#000"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-search"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </label>
+      search box end -->
+      <!-- new list section -->
+      <br />
+      <ul class="pl-3">
+        <li
+          onclick="openTab(event, 'tab1')"
+          class="tab-button active flex duration-200 justify-between gap-3 items-center pt-2 pb-2"
+        >
+          <div class="flex gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-sun"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            My Day
+          </div>
+          <% if (uncompletedTaskCount > 0) { %> <%= uncompletedTaskCount %> <% }
+          %>
+        </li>
+        <li
+          onclick="openTab(event, 'tab2')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-star"
+          >
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            ></polygon>
+          </svg>
+          important
+        </li>
+        <li
+          onclick="openTab(event, 'tab3')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-list"
+          >
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          Planed
+        </li>
+        <li
+          onclick="openTab(event, 'tab4')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-user"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Assign to me
+        </li>
+        <li
+          onclick="openTab(event, 'tab5')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-home"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Tasks
+        </li>
+        <hr />
+        <li
+          onclick="openTab(event, 'tab6')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-sun"
+          >
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          Getting Started
+        </li>
+        <li
+          onclick="openTab(event, 'tab7')"
+          class="flex justify-around gap-3 items-center pt-2 pb-2 p-2 fixed bottom-2 w-[280px]"
+        >
+          <div class="flex justify-start gap-3 items-center w-[90%]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-plus"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New List
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-edit"
+          >
+            <path
+              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+            ></path>
+            <path
+              d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+            ></path>
+          </svg>
+        </li>
+      </ul>
+      <!-- new list section end -->
+    </section>
+    <!-- SECTION TWO FOR BODY -->
+    <section
+      class="sec-2 bg-cover bg-slate-400 bg-center h-screen relative"
+      style="
+        width: calc(100% - 300px);
+        background: url('https://cdn.pixabay.com/photo/2021/07/08/14/06/sea-6397001_1280.jpg');
+        border-top-left-radius: 10px;
+      "
+      id="gallery"
+    >
+      <div class="tab-content bg-opacity-30 active" id="tab1">
+        <!-- Header -->
+        <!-- <div
+          class="ls justify-center w-20 items-center cursor-pointer"
+          onclick="navbar()"
+        >
+          <i class="bi-three-dots-vertical"></i>
+        </div> -->
+        <div
+          class="top-0 left-0 h-24 flex-col flex items-center justify-between pr-7 backdrop-blur-md bg-opacity-35 text-black m-0"
+          style="
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-top-left-radius: 10px;
+          "
+        >
+          <div
+            class="ls justify-start w-full items-center cursor-pointer"
+            onclick="navbar()"
+          >
+            <i class="bi-list text-2xl pl-3"></i>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+            "
+          >
+            <div
+              class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+              style="line-height: 1.5"
+            >
+              <div>
+                <div class="flex justify-start items-center gap-5">
+                  <!-- <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="ti-btn feather feather-home"
+                  >
+                    <path
+                      d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                    ></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg> -->
+                  My Day
+                </div>
+                <div class="date" class="text-sm"></div>
+              </div>
+            </div>
+            <div class="menus flex justify-center w-20 items-center">
+              <!-- <svg 
+            id="fullscreen"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-fullscreen"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"
+              />
+            </svg> -->
+              <i class="bi-fullscreen" id="fullscreen"></i>
+            </div>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% uncompletedTask.forEach(task => { %>
+            <div
+              oncontextmenu="showContextMenu(event, '<%= task._id %>')"
+              class="w-[90%] text-white bg-opacity-10 backdrop-blur-lg mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input onclick="check('<%= task._id %>')" type="checkbox"
+                  id="cbx-<%= task.id %>" class="inp" <%= task.completed ?
+                  'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list" class="w-fit text-wrap overflow-clip"
+                ><%= task.description %></span
+              >
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <div
+              class="p-10 flex flex-col justify-center items-center bg-blue-300 bg-opacity-5 rounded-lg shadow-md backdrop-blur-md"
+            >
+              <!-- <img src="./img\image.png" alt="" width="200px" draggable="false" /> -->
+              <h1 class="text-2xl text-black">Add Some Tasks Here</h1>
+            </div>
+            <%};%> <% if (uncompletedTask.length >= 0) { %>
+            <div class="w-[90%] m-3" id="btn-pop">
+              <button
+                class="text-white p-2 bg-gray-500 bg-opacity-10 rounded-md backdrop-blur-md"
+              >
+                <i class="bi bi-chevron-down" id="bt"></i> Completed <%=
+                completedTaskCount %>
+              </button>
+            </div>
+            <% } %>
+
+            <div
+              id="hidebar"
+              class="flex items-center w-full snap-y snap-mandatory flex-col text-sm text-gray-500"
+            >
+              <% completedTask.forEach(task => { %>
+              <div
+                oncontextmenu="showContextMenu(event, '<%= task._id %>')"
+                class="duration-75 w-[90%] text-white bg-opacity-45 backdrop-blur-lg mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+              >
+                <div class="checkbox-wrapper-12">
+                  <div class="cbx">
+                    <input onclick="check('<%= task._id %>')" type="checkbox"
+                    id="cbx-<%= task.id %>" class="inp" <%= task.completed ?
+                    'checked' : '' %>>
+                    <label for="cbx-<%= task.id %>"></label>
+                    <svg
+                      fill="none"
+                      viewBox="0 0 15 14"
+                      height="14"
+                      width="15"
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <path d="M2 8.36364L6.23077 12L13 2"></path>
+                    </svg>
+                  </div>
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <filter id="goo-12">
+                        <feGaussianBlur
+                          result="blur"
+                          stdDeviation="4"
+                          in="SourceGraphic"
+                        ></feGaussianBlur>
+                        <feColorMatrix
+                          result="goo-12"
+                          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                          mode="matrix"
+                          in="blur"
+                        ></feColorMatrix>
+                        <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
+                <span id="list" class="w-fit text-wrap overflow-clip"
+                  ><%= task.description %></span
+                >
+              </div>
+              <% }); %> <% if(tasks.length === 0){ %>
+              <div
+                class="p-10 flex flex-col justify-center items-center bg-blue-300 bg-opacity-5 rounded-lg shadow-md backdrop-blur-md"
+              >
+                <!-- <img src="./img\image.png" alt="" width="200px" draggable="false" /> -->
+                <h1 class="text-2xl text-black">Add Some Tasks Here</h1>
+              </div>
+              <%};%>
+            </div>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] outline-none p-3 rounded-lg mb-3 flex items-center gap-5 backdrop-blur-lg"
+            style="
+              color: rgb(14, 13, 13) !important;
+              background: rgba(0, 25, 252, 0.048);
+            "
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <form
+              action="/tasks/<%= findUser._id %>"
+              method="post"
+              style="font-family: 'Courier New', Courier, monospace"
+              class="w-full"
+            >
+              <input
+                spellcheck="true"
+                autocapitalize="true"
+                autofocus
+                minlength="5"
+                type="text"
+                id="box"
+                class="w-[100%] bg-transparent outline-none rounded-lg"
+                placeholder="Add tasks"
+                style="width: 100%"
+                autocomplete="off"
+                name="description"
+              />
+            </form>
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+      <div class="tab-content bg-opacity-30 active" id="tab2">
+        <!-- Header -->
+        <div
+          class="top-0 left-0 h-24 flex items-center justify-between pr-7 backdrop-blur-sm bg-opacity-35 text-black m-0"
+          style="width: 100%; position: absolute; top: 0; left: 0"
+        >
+          <div
+            class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+            style="line-height: 0%"
+          >
+            <div class="flex justify-start items-center gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-home"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              My Day
+            </div>
+            <div class="date" class="text-sm"></div>
+          </div>
+          <div class="menus flex justify-between w-20 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-arrow-up-right"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            <svg
+              onclick="openPopup()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-more-horizontal"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% tasks.forEach(task => { %>
+            <div
+              class="w-[90%] bg-slate-200 bg-opacity-45 backdrop-blur-xl mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input type="checkbox" id="cbx-<%= task.id %>" class="inp" <%=
+                  task.completed ? 'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list"><%= task.description %></span>
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <img src="./img\image.png" alt="" width="200px" draggable="false" />
+            <h1 class="text-2xl">No Tasks Found</h1>
+            <%};%>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] backdrop-blur-md outline-none p-3 rounded-lg mb-3 flex items-center gap-5"
+            style="color: gray !important; background: rgba(0, 25, 252, 0.048)"
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <form
+              action="/importentTasks/<%= findUser._id %>"
+              method="post"
+              style="font-family: 'Courier New', Courier, monospace"
+              class="w-full"
+            >
+              <input
+                type="text"
+                id="box"
+                class="w-[100%] bg-transparent outline-none rounded-lg"
+                placeholder="Add tasks"
+                style="width: 100%"
+              />
+            </form>
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+      <div class="tab-content bg-opacity-30 active" id="tab3">
+        <!-- Header -->
+        <div
+          class="top-0 left-0 h-24 flex items-center justify-between pr-7 backdrop-blur-sm bg-opacity-35 text-black m-0"
+          style="width: 100%; position: absolute; top: 0; left: 0"
+        >
+          <div
+            class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+            style="line-height: 0%"
+          >
+            <div class="flex justify-start items-center gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-home"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              My Day
+            </div>
+            <div class="date" class="text-sm"></div>
+          </div>
+          <div class="menus flex justify-between w-20 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-arrow-up-right"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            <svg
+              onclick="openPopup()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-more-horizontal"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% tasks.forEach(task => { %>
+            <div
+              class="w-[90%] bg-slate-200 bg-opacity-45 backdrop-blur-xl mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input type="checkbox" id="cbx-<%= task.id %>" class="inp" <%=
+                  task.completed ? 'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list"><%= task.description %></span>
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <img src="./img\image.png" alt="" width="200px" draggable="false" />
+            <h1 class="text-2xl">No Tasks Found</h1>
+            <%};%>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] outline-none p-3 rounded-lg mb-3 flex items-center gap-5"
+            style="color: gray !important; background: rgba(0, 25, 252, 0.048)"
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <input
+              type="text"
+              id="box"
+              class="w-[100%] bg-transparent outline-none rounded-lg"
+              placeholder="Add tasks"
+              style="width: 100%"
+            />
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+      <div class="tab-content bg-opacity-30 active" id="tab4">
+        <!-- Header -->
+        <div
+          class="top-0 left-0 h-24 flex items-center justify-between pr-7 backdrop-blur-sm bg-opacity-35 text-black m-0"
+          style="width: 100%; position: absolute; top: 0; left: 0"
+        >
+          <div
+            class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+            style="line-height: 0%"
+          >
+            <div class="flex justify-start items-center gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-home"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              My Day
+            </div>
+            <div class="date" class="text-sm"></div>
+          </div>
+          <div class="menus flex justify-between w-20 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-arrow-up-right"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            <svg
+              onclick="openPopup()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-more-horizontal"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% tasks.forEach(task => { %>
+            <div
+              class="w-[90%] bg-slate-200 bg-opacity-45 backdrop-blur-xl mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input type="checkbox" id="cbx-<%= task.id %>" class="inp" <%=
+                  task.completed ? 'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list"><%= task.description %></span>
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <img src="./img\image.png" alt="" width="200px" draggable="false" />
+            <h1 class="text-2xl">No Tasks Found</h1>
+            <%};%>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] outline-none p-3 rounded-lg mb-3 flex items-center gap-5"
+            style="color: gray !important; background: rgba(0, 25, 252, 0.048)"
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <input
+              type="text"
+              id="box"
+              class="w-[100%] bg-transparent outline-none rounded-lg"
+              placeholder="Add tasks"
+              style="width: 100%"
+            />
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+      <div class="tab-content bg-opacity-30 active" id="tab5">
+        <!-- Header -->
+        <div
+          class="top-0 left-0 h-24 flex items-center justify-between pr-7 backdrop-blur-sm bg-opacity-35 text-black m-0"
+          style="width: 100%; position: absolute; top: 0; left: 0"
+        >
+          <div
+            class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+            style="line-height: 0%"
+          >
+            <div class="flex justify-start items-center gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-home"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              My Day
+            </div>
+            <div class="date" class="text-sm"></div>
+          </div>
+          <div class="menus flex justify-between w-20 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-arrow-up-right"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            <svg
+              onclick="openPopup()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-more-horizontal"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% tasks.forEach(task => { %>
+            <div
+              class="w-[90%] bg-slate-200 bg-opacity-45 backdrop-blur-xl mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input type="checkbox" id="cbx-<%= task.id %>" class="inp" <%=
+                  task.completed ? 'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list"><%= task.description %></span>
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <img src="./img\image.png" alt="" width="200px" draggable="false" />
+            <h1 class="text-2xl">No Tasks Found</h1>
+            <%};%>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] outline-none p-3 rounded-lg mb-3 flex items-center gap-5"
+            style="color: gray !important; background: rgba(0, 25, 252, 0.048)"
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <input
+              type="text"
+              id="box"
+              class="w-[100%] bg-transparent outline-none rounded-lg"
+              placeholder="Add tasks"
+              style="width: 100%"
+            />
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+      <div class="tab-content bg-opacity-30 active" id="tab6">
+        <!-- Header -->
+        <div
+          class="top-0 left-0 h-24 flex items-center justify-between pr-7 backdrop-blur-sm bg-opacity-35 text-black m-0"
+          style="width: 100%; position: absolute; top: 0; left: 0"
+        >
+          <div
+            class="title pl-3 text-3xl flex gap-4 items-start flex-col"
+            style="line-height: 0%"
+          >
+            <div class="flex justify-start items-center gap-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-home"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              My Day
+            </div>
+            <div class="date" class="text-sm"></div>
+          </div>
+          <div class="menus flex justify-between w-20 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-arrow-up-right"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+            <svg
+              onclick="openPopup()"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-more-horizontal"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </svg>
+          </div>
+        </div>
+        <!-- Header end -->
+        <!-- Middle Content -->
+        <div
+          class="flex items-center w-full border-none outline-none overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+          style="height: 100%"
+        >
+          <div
+            class="flex items-center w-full mt-28 overflow-y-scroll snap-y snap-mandatory flex-col text-sm text-gray-500"
+            style="height: calc(100% - 236px)"
+          >
+            <% tasks.forEach(task => { %>
+            <div
+              class="w-[90%] bg-slate-200 bg-opacity-45 backdrop-blur-xl mb-2 h-[50px] outline-none p-3 rounded-lg flex items-center justify-start gap-5 snap-center"
+            >
+              <div class="checkbox-wrapper-12">
+                <div class="cbx">
+                  <input type="checkbox" id="cbx-<%= task.id %>" class="inp" <%=
+                  task.completed ? 'checked' : '' %>>
+                  <label for="cbx-<%= task.id %>"></label>
+                  <svg
+                    fill="none"
+                    viewBox="0 0 15 14"
+                    height="14"
+                    width="15"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <path d="M2 8.36364L6.23077 12L13 2"></path>
+                  </svg>
+                </div>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="goo-12">
+                      <feGaussianBlur
+                        result="blur"
+                        stdDeviation="4"
+                        in="SourceGraphic"
+                      ></feGaussianBlur>
+                      <feColorMatrix
+                        result="goo-12"
+                        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                        mode="matrix"
+                        in="blur"
+                      ></feColorMatrix>
+                      <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+              <span id="list"><%= task.description %></span>
+            </div>
+            <% }); %> <% if(tasks.length === 0){ %>
+            <img src="./img\image.png" alt="" width="200px" draggable="false" />
+            <h1 class="text-2xl">No Tasks Found</h1>
+            <%};%>
+          </div>
+        </div>
+        <!-- Middle Content End -->
+        <!-- Bottom  -->
+        <div
+          class="fixed bottom-0 left-0 text-gray-500 flex justify-center items-center"
+          style="width: 100%; position: absolute; left: 0"
+        >
+          <div
+            class="w-[80%] bg-white h-[60px] outline-none p-3 rounded-lg mb-3 flex items-center gap-5"
+            style="color: gray !important; background: rgba(0, 25, 252, 0.048)"
+          >
+            <label for="box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </label>
+            <input
+              type="text"
+              id="box"
+              class="w-[100%] bg-transparent outline-none rounded-lg"
+              placeholder="Add tasks"
+              style="width: 100%"
+            />
+          </div>
+        </div>
+        <!-- Bottom End -->
+      </div>
+
+      <!-- popup -->
+      <div
+        id="popup"
+        class="w-0 duration-75 min-h-52 opacity-0 overflow-scroll p-4 bg-slate-200 backdrop-blur-lg bg-opacity-45 fixed right-4 top-[100px] flex justify-center items-center flex-wrap gap-7"
+        style="height: 300px"
+      >
+        <p
+          style="
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 3px;
+            width: 100%;
+          "
+        >
+          <font>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-droplet"
+            >
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </font>
+          Choose One Color
+        </p>
+        <div class="bg-blue-500 w-10 h-10 colorPlate" id="btn1"></div>
+        <div
+          class="bg-yellow-500 w-10 h-10 colorPlate colorPlateActive"
+          id="btn2"
+        ></div>
+        <div class="bg-zinc-200 w-10 h-10 colorPlate" id="btn3"></div>
+        <div class="bg-slate-800 w-10 h-10 colorPlate" id="btn4"></div>
+        <div class="bg-orange-600 w-10 h-10 colorPlate" id="btn5"></div>
+        <div class="bg-indigo-700 w-10 h-10 colorPlate" id="btn6"></div>
+        <div class="bg-indigo-300 w-10 h-10 colorPlate" id="btn7"></div>
+        <div class="bg-red-500 w-10 h-10 colorPlate" id="btn8"></div>
+        <div class="bg-green-500 w-10 h-10 colorPlate" id="btn9"></div>
+        <div class="bg-purple-500 w-10 h-10 colorPlate" id="btn10"></div>
+        <div class="bg-pink-500 w-10 h-10 colorPlate" id="btn11"></div>
+        <div class="bg-teal-500 w-10 h-10 colorPlate" id="btn12"></div>
+        <div class="bg-indigo-500 w-10 h-10 colorPlate" id="btn13"></div>
+        <div class="bg-cyan-500 w-10 h-10 colorPlate" id="btn14"></div>
+        <div class="bg-lime-500 w-10 h-10 colorPlate" id="btn15"></div>
+        <div class="bg-amber-500 w-10 h-10 colorPlate" id="btn16"></div>
+        <div class="bg-emerald-500 w-10 h-10 colorPlate" id="btn17"></div>
+        <div class="bg-violet-500 w-10 h-10 colorPlate" id="btn18"></div>
+        <div class="bg-fuchsia-500 w-10 h-10 colorPlate" id="btn19"></div>
+        <div class="bg-rose-500 w-10 h-10 colorPlate" id="btn20"></div>
+        <div class="bg-sky-500 w-10 h-10 colorPlate" id="btn21"></div>
+        <div class="bg-blue-700 w-10 h-10 colorPlate" id="btn22"></div>
+        <div class="bg-yellow-700 w-10 h-10 colorPlate" id="btn23"></div>
+        <div class="bg-zinc-300 w-10 h-10 colorPlate" id="btn24"></div>
+        <div class="bg-slate-900 w-10 h-10 colorPlate" id="btn25"></div>
+        <div class="bg-orange-700 w-10 h-10 colorPlate" id="btn26"></div>
+        <div class="bg-red-700 w-10 h-10 colorPlate" id="btn27"></div>
+        <div class="bg-green-300 w-10 h-10 colorPlate" id="btn28"></div>
+        <div class="bg-yellow-700 w-10 h-10 colorPlate" id="btn29"></div>
+        <div class="bg-blue-300 w-10 h-10 colorPlate" id="btn30"></div>
+        <p
+          style="
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 3px;
+            width: 100%;
+          "
+        >
+          <font>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-printer"
+            >
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path
+                d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+              ></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+          </font>
+          Print The List
+        </p>
+        <p
+          style="
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 3px;
+            width: 100%;
+          "
+        >
+          <font>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-mail"
+            >
+              <path
+                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+              ></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </font>
+          Mail This List
+        </p>
+      </div>
+
+      <!-- context menu -->
+      <div
+        id="context"
+        style="display: none"
+        class="w-52 absolute shadow-lg rounded-lg z-50 top-0 left-0 text-gray-500 bg-white p-3 flex justify-center items-center gap-4 flex-col"
+      >
+        <div
+          class="flex justify-start gap-2 items-center w-full hover:bg-gray-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-sun"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+          <span>Add To My Day</span>
+        </div>
+        <div
+          class="flex justify-start gap-2 items-center w-full hover:bg-gray-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-star"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+          </span>
+          <span> Mark As importent </span>
+        </div>
+        <div
+          class="flex justify-start gap-2 items-center w-full hover:bg-gray-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-circle"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+            </svg>
+          </span>
+          <span> Mark As completed </span>
+        </div>
+        <div
+          class="flex justify-start gap-2 items-center w-full hover:bg-gray-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              fill="currentColor"
+              class="bi bi-calendar"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
+              />
+            </svg>
+          </span>
+          <span> Pick a date </span>
+        </div>
+        <div
+          class="flex justify-start gap-2 items-center w-full hover:bg-gray-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              fill="currentColor"
+              class="bi bi-calendar-check"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"
+              />
+              <path
+                d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
+              />
+            </svg>
+          </span>
+          <span> Due date </span>
+        </div>
+        <div
+          class="flex justify-start gap-5 items-center w-full text-red-500 hover:bg-red-500 hover:bg-opacity-15 pt-1 pb-2 pr-2 hover:rounded-lg cursor-pointer pl-2 duration-100"
+          id="deleteTask"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-trash3"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"
+              />
+            </svg>
+          </span>
+          <span> Delete </span>
+        </div>
+      </div>
+    </section>
+    <audio id="checkbox-sound" src="./level-up-191997.mp3"></audio>
+
+    <div
+      id="pop"
+      class="popClass bg-slate-200 h-screen text-sm fixed top-0 left-0"
+      style="width: 0px; overflow: hidden"
+    >
+      <!-- profile section -->
+      <div class="flex justify-start items-center gap-2">
+        <!-- <img
+        src="https://th.bing.com/th?id=OIP.y-nGyqT5AwES8oqp344z4gHaHa&w=250&h=250&c=8&rs=1&qlt=30&o=6&pid=3.1&rm=2"
+        alt=""
+        class="w-14 rounded-full m-2"
+      /> -->
+        <div
+          id="profile"
+          class="w-14 rounded-full m-2 flex justify-center items-center bg-red-200 h-14 text-xl"
+        >
+          <% if (findUser.profileImage) { %>
+          <img src="<%= findUser.profileImage %>" alt="Profile Image" />
+          <% } else { %> <%= findUser.username.split(' ').map(name =>
+          name[0]).join('') %> <% } %>
+        </div>
+
+        <div class="flex justify-between flex-col">
+          <span class="font-bold"><%= findUser.username %></span>
+          <span class="text-sm"><%= findUser.email %></span>
+        </div>
+      </div>
+      <!-- profile section end-->
+      <!-- search box -->
+      <!-- <label
+      for="search"
+      class="flex justify-around pr-2 items-center m-2 rounded-lg bg-white border-b border-blue-500"
+    >
+      <input type="search" class="w-[230px] rounded-lg p-2 outline-none" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#000"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-search"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </label>
+    search box end -->
+      <!-- new list section -->
+      <br />
+      <ul class="pl-3">
+        <li
+          onclick="openTab(event, 'tab1')"
+          class="tab-button active flex duration-200 justify-between gap-3 items-center pt-2 pb-2"
+        >
+          <div class="flex gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-sun"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            My Day
+          </div>
+          <%= uncompletedTaskCount%>
+        </li>
+        <li
+          onclick="openTab(event, 'tab2')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-star"
+          >
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            ></polygon>
+          </svg>
+          important
+        </li>
+        <li
+          onclick="openTab(event, 'tab3')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-list"
+          >
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          Planed
+        </li>
+        <li
+          onclick="openTab(event, 'tab4')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-user"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Assign to me
+        </li>
+        <li
+          onclick="openTab(event, 'tab5')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-home"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Tasks
+        </li>
+        <hr />
+        <li
+          onclick="openTab(event, 'tab6')"
+          class="tab-button flex duration-200 justify-start gap-3 items-center pt-2 pb-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-sun"
+          >
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          Getting Started
+        </li>
+        <li
+          onclick="openTab(event, 'tab7')"
+          class="flex justify-around gap-3 items-center pt-2 pb-2 p-2 fixed bottom-2 w-[280px]"
+        >
+          <div class="flex justify-start gap-3 items-center w-[90%]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="19"
+              height="19"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-plus"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New List
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-edit"
+          >
+            <path
+              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+            ></path>
+            <path
+              d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+            ></path>
+          </svg>
+        </li>
+      </ul>
+      <!-- new list section end -->
+    </div>
+
+    <script type="module">
+      import dayjs from "https://cdn.skypack.dev/dayjs";
+      let date = dayjs().format("YYYY-MMMM-DD");
+      let printDate = document.querySelectorAll(".date");
+      printDate.forEach((cal) => {
+        cal.textContent = date;
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $("#btn-pop").click(function () {
+          $("#hidebar").toggle();
+          $("#bt").toggleClass("bi-chevron-up");
+        });
+      });
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
